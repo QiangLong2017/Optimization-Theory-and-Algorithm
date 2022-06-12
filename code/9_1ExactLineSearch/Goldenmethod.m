@@ -1,0 +1,43 @@
+function [xmin,fmin]=Goldenmethod(a,b)
+
+global counterf
+counterf=0;
+
+% set parameters
+L=1e-4;
+alpha=(sqrt(5)-1)/2;
+
+% the first loop
+ak=a;
+bk=b;
+lambdak=ak+(1-alpha)*(bk-ak);
+muk=ak+alpha*(bk-ak);
+flambdak=obj1(lambdak);
+fmuk=obj1(muk);
+
+ while 1
+    % iteration    
+    if flambdak<fmuk
+        bk=muk;
+        % keep lambdak as muk, recompute lambdak
+        muk=lambdak;
+        fmuk=flambdak;        
+        lambdak=ak+(1-alpha)*(bk-ak);
+        flambdak=obj1(lambdak);        
+    else
+        ak=lambdak;
+        % keep muk as lambdak, recompute muk
+        lambdak=muk;
+        flambdak=fmuk;
+        muk=ak+alpha*(bk-ak);
+        fmuk=obj1(muk);
+    end
+     
+     % check stop criterion
+    if (bk-ak)<L
+        xmin=(ak+bk)/2;
+        fmin=obj1(xmin);
+        break;
+    end
+ end
+counterf
